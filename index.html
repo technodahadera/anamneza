@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08223a">
+<title>חדר מיון LIVE | מסך מורה ותלמיד • גרסה 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#071826;--surface:#102b3e;--surface2:#14344a;--border:#305568;--ink:#effbff;--muted:#a9c5d3;--mint:#4af5c5;--blue:#6e9fff;--gold:#ffd089;--ok:#84e6ac;--danger:#ffaaaa}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 5% 5%,#16345d,transparent 52%),radial-gradient(ellipse at 95% 90%,#123f49,transparent 52%),var(--bg);color:var(--ink);font:16px/1.55 'Rubik',Arial,sans-serif}
+body,button,input{font-family:'Rubik',Arial,sans-serif}button{cursor:pointer;font-weight:700;border:0;font-size:15px;transition:.16s ease}button:active{transform:scale(.985)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:3px}button:disabled{cursor:not-allowed;opacity:.44}
+.container{width:min(1480px,calc(100% - 34px));margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:26px 0 22px}
+.logo{display:flex;align-items:center;gap:12px;font-size:26px;font-weight:900;letter-spacing:-1px}.logo b{color:var(--mint)}
+.med-symbol{display:grid;place-items:center;background:#163e4d;border:1px solid #32788c;width:47px;height:47px;border-radius:15px;font-size:26px}
+.micro{font-size:12px;color:var(--muted);font-weight:500}.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #3b687a;background:#15384a;color:#c6f9f7;border-radius:99px;padding:7px 13px;font-size:12px;font-weight:700}
+main{padding-bottom:40px}.card{background:linear-gradient(145deg,#113248ed,#0e2639f5);border:1px solid var(--border);border-radius:24px;padding:25px;box-shadow:0 16px 35px #0002}
+h1,h2,h3,p{margin-top:0}h1{font-size:clamp(32px,4.5vw,67px);line-height:1.17;letter-spacing:-1.7px}h2{font-size:clamp(21px,2.3vw,32px);line-height:1.3}h3{font-size:20px}.muted{color:var(--muted)}
+.hero{padding:66px min(7vw,90px);text-align:center;max-width:950px;margin:25px auto;border:2px solid #397081}
+.hero h1{margin:16px 0 13px}.hero p{font-size:18px;color:var(--muted);max-width:580px;margin:0 auto 25px}
+.actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn{min-height:49px;padding:12px 22px;border-radius:14px;background:#25485c;color:white;border:1px solid #487386;display:inline-flex;align-items:center;justify-content:center;gap:9px}
+.btn.primary{background:linear-gradient(110deg,#50f4c7,#90b6ff);color:#062134;border:none}
+.btn.ghost{background:transparent}.btn.current{background:#124f5e;border-color:var(--mint);color:#a7fffa}
+.btn.tiny{font-size:13px;min-height:37px;padding:8px 13px}.btn.large{font-size:18px;min-height:58px;padding:13px 24px}
+.btn.block{width:100%} .btn:hover:not(:disabled){filter:brightness(1.1)}
+.grid{display:grid;gap:18px}.grid2{grid-template-columns:minmax(0,1.5fr) minmax(290px,.78fr)}
+.teacher-panels{grid-template-columns:minmax(0,1fr) minmax(325px,.78fr)}
+.case-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 17px}.case-tabs .btn{flex:1}
+.phase-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.phase-tabs button{flex:1}
+.topline{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.teacher-pills{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.code{display:block;direction:ltr;font-size:clamp(38px,4.6vw,67px);font-weight:900;letter-spacing:10px;color:var(--mint);font-variant-numeric:tabular-nums;margin:2px 0 7px;line-height:1.1}
+.row{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.label{font-size:13px;font-weight:800;color:var(--mint);letter-spacing:.3px}
+.viewer{border:1px solid #396477;background:#071520;border-radius:18px;overflow:hidden;aspect-ratio:16/9}
+.viewer video{display:block;width:100%;height:100%;object-fit:contain}
+.poster{height:100%;display:grid;place-items:center;text-align:center;background:linear-gradient(120deg,#0e3b4d,#123d53);font-size:48px}
+.presenter{margin:16px 0 0;padding:17px;border-radius:15px;border:1px solid #36596b;background:#0c2b3d}
+.presenter h3{margin:9px 0}.hint{color:#acc7d3;font-size:13px}
+.qr-wrap{background:white;padding:12px;border-radius:15px;display:inline-flex;justify-content:center;align-items:center;width:186px;height:186px;color:#071826}
+.invite-panel{display:grid;grid-template-columns:1fr 185px;gap:22px;align-items:center}
+.invite-panel p{max-width:380px}.invite-link{word-break:break-all;direction:ltr;font-size:12px;color:#b6ddeb;max-width:390px;text-align:right}
+.counter{font-size:35px;color:var(--mint);font-weight:900;font-variant-numeric:tabular-nums}
+.stats{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:14px 0 8px}.stat{background:#0b293b;border:1px solid #28596d;padding:13px 18px;border-radius:15px;flex:1;min-width:130px}
+.bar-stack{display:grid;gap:16px;margin:19px 0}
+.answer-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 14px;align-items:center;padding:13px 15px;background:#0d2b3c;border:1px solid #2a5062;border-radius:15px}
+.answer-title{font-size:17px;font-weight:700;line-height:1.45}.answer-num{font-weight:900;font-size:22px;color:#e2faf9;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar-track{height:12px;background:#224558;border-radius:99px;overflow:hidden;grid-column:1/-1}
+.bar-fill{height:100%;background:linear-gradient(90deg,#13beba,#6ac8fa);border-radius:99px;min-width:0}
+.teacher-note{background:#193c47;border-right:4px solid var(--gold);padding:14px;border-radius:10px;color:#d0e8e7;margin-top:12px}
+.mobile-card{width:min(610px,100%);margin:15px auto;padding:29px}.phone-option{width:100%;text-align:right;display:flex;gap:13px;align-items:center;padding:17px 17px;margin:11px 0;background:#13364a;color:#fff;border:2px solid #3c6070;border-radius:15px;min-height:66px;line-height:1.45;font-size:16px}
+.phone-option .circle{width:27px;height:27px;border-radius:50%;border:2px solid #7296a6;display:inline-grid;place-items:center;flex:none;font-size:14px}
+.phone-option.selected{border-color:var(--mint);background:#164b52}.phone-option.selected .circle{color:#073137;background:var(--mint);border-color:var(--mint)}
+.phone-option:hover{border-color:#82cfe3}.instruction{background:#0b2c3c;padding:14px 17px;border-radius:12px;border:1px solid #2e6270;color:#c8e3e8;font-size:14px;margin:18px 0}
+.saved{background:#173e43;border:1px solid #439d8c;color:#b7fbe4;padding:14px 18px;border-radius:13px;font-weight:700}
+.input{width:100%;font-size:28px;letter-spacing:7px;text-align:center;direction:ltr;color:var(--ink);background:#0d2739;border:1px solid #4a8090;border-radius:13px;padding:15px;outline:none}
+.line{border:0;border-top:1px solid #305468;margin:22px 0}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ffc277;margin-left:6px}
+.dot.good{background:var(--ok)}.foot{text-align:center;font-size:12px;color:#86a6b4;padding:19px 10px 32px}
+.error{color:#ffc0c0}.big-wait{text-align:center;padding:65px 16px 55px}.big-wait .bubble{font-size:66px;margin-bottom:10px}
+.summary{font-size:13px;color:#a8d9da}.empty{font-size:15px;color:var(--muted);padding:22px;text-align:center;border:1px dashed #476979;border-radius:15px}
+#message{position:fixed;bottom:20px;left:15px;right:15px;max-width:520px;margin:auto;padding:14px 20px;background:#164352;border:1px solid var(--mint);border-radius:14px;color:#f3ffff;box-shadow:0 12px 35px #0006;text-align:center;z-index:20}
+[hidden]{display:none!important}
+@media(min-width:1120px){.teacher-screen .container{width:min(1600px,calc(100% - 56px))}.teacher-screen h3{font-size:23px}}
+@media(max-width:900px){.grid2,.teacher-panels{grid-template-columns:1fr}.invite-panel{grid-template-columns:1fr}.qr-wrap{margin:auto}.case-tabs,.phase-tabs{flex-wrap:wrap}.case-tabs .btn,.phase-tabs .btn{flex:auto}}
+@media(max-width:580px){.container{width:calc(100% - 22px)}header{padding:16px 0}.logo{font-size:20px}.med-symbol{width:38px;height:38px;font-size:19px}.card{padding:17px;border-radius:18px}.hero{padding:38px 18px}.hero h1{font-size:36px}.hero p{font-size:15px}.btn.large{font-size:16px}.mobile-card{padding:19px}.code{font-size:38px;letter-spacing:6px}.topline{align-items:flex-start}.teacher-pills{gap:6px}.phone-option{font-size:15px}.stat{min-width:110px;padding:10px}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.5/peerjs.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+</head>
+<body>
+<div class="container">
+<header>
+ <div class="logo"><span class="med-symbol">🩺</span><span>חדר מיון <b>LIVE</b><div class="micro">מורה שואל · תלמידים בוחרים · הכיתה דנה</div></span></div>
+ <span class="pill" style="border-color:#4af5c5;color:#4af5c5">גרסה 2.0 · פשוטה · טכנודע</span>
+</header>
+<main id="app" aria-live="polite"></main>
+<div class="foot">גרסה 2.0 · מקרים רפואיים בדויים ללמידה · החיבור החי משתמש בשירות PeerJS ובאינטרנט פעיל</div>
+</div>
+<div id="message" role="status" hidden></div>
+<script>
+'use strict';
+// TECHNODA MEDLIVE SIMPLE v2.0 - 2026-11-01; replace the entire GitHub Pages index.html with this file.
+
+const CASES = [{"id":"maya","name":"מאיה","age":13,"subtitle":"תיק 01","title":"קשיי נשימה לאחר ריצה","video":"https://res.cloudinary.com/gstuiyt9/video/upload/v1793520502/%D7%9E%D7%A7%D7%A8%D7%94_%D7%9E%D7%90%D7%99%D7%94.mp4","question":{"title":"איזו שאלה הייתם שואלים את מאיה קודם?","options":["האם את מצליחה לדבר במשפטים שלמים ולנשום גם במנוחה?","האם הרגשת קושי דומה בעבר?","האם יש משהו מסוים שמחמיר את התחושה?","האם את נוטלת תרופות או משתמשת במשאף?"]},"metrics":{"title":"אילו שני מדדים הייתם בוחרים לבדוק קודם?","options":["סטורציה (ריווי חמצן)","קצב הנשימה","דופק","לחץ דם","חום גוף","רפלקסים"]},"note":"בקשיי נשימה חשוב להעריך תחילה את חומרת המצוקה. קצב נשימה, סטורציה ודופק יכולים לסייע, אך אינם קובעים לבדם אבחנה. אם יש קושי ניכר בדיבור או בנשימה, נדרשת הערכה רפואית דחופה."},{"id":"noam","name":"נועם","age":14,"subtitle":"תיק 02","title":"סחרחורת לאחר פעילות בשמש","video":"https://res.cloudinary.com/gstuiyt9/video/upload/v1793520502/%D7%9E%D7%A7%D7%A8%D7%94_%D7%A0%D7%95%D7%A2%D7%9D.mp4","question":{"title":"איזו שאלה הייתם שואלים את נועם קודם?","options":["האם איבדת הכרה, נפלת או נפגעת בראש?","כמה מים שתית היום?","מתי אכלת לאחרונה?","האם הרגשת סחרחורת דומה בעבר?"]},"metrics":{"title":"אילו שני מדדים הייתם בוחרים לבדוק קודם?","options":["דופק","לחץ דם","חום גוף","סטורציה (ריווי חמצן)","קצב הנשימה","רפלקסים"]},"note":"בסחרחורת אחרי מאמץ יש לברר תחילה עילפון, חבלה וסימני אזהרה. מדדים יכולים להוסיף מידע, לצד שאלות על שתייה, אכילה וחשיפה לחום. אין להסיק שהתייבשות היא בהכרח הסיבה."},{"id":"tamar","name":"תמר","age":13,"subtitle":"תיק 03","title":"חום וכאב גרון","video":"https://res.cloudinary.com/gstuiyt9/video/upload/v1793518406/%D7%9E%D7%A7%D7%A8%D7%94_%D7%AA%D7%9E%D7%A8.mp4","question":{"title":"איזו שאלה הייתם שואלים את תמר קודם?","options":["האם את מצליחה לבלוע רוק ולנשום כרגיל?","מתי בדיוק התחיל כאב הגרון?","האם מופיע גם שיעול?","האם היו אנשים חולים בסביבתך?"]},"metrics":{"title":"אילו שני מדדים הייתם בוחרים לבדוק קודם?","options":["חום גוף","דופק","סטורציה (ריווי חמצן)","קצב הנשימה","לחץ דם","רפלקסים"]},"note":"כאב גרון וחום דורשים בירור, ובפרט חשוב לזהות קושי בנשימה או בבליעת רוק כסימני אזהרה. חום, דופק ומדדים נוספים מתארים את המצב, אך אינם מבחינים לבדם בין הגורמים האפשריים."}];
+const MODE = { VIDEO:'video', QUESTION:'question', METRICS:'metrics' };
+let role = 'home', peer=null, connection=null, roomCode='', stage={caseIndex:0,phase:MODE.VIDEO,round:'0:video'};
+let connections=new Map(), participants=new Map(), votesByPoll=new Map();
+let revealResults=true, studentId='', mySelected=[], studentVote=null, lastRound='', activeCount=0;
+const app=document.getElementById('app');
+const letters='אבגדהוזחט';
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const hostId=c=>'technoda-medlive-'+c;
+const getRound=()=>stage.caseIndex+':'+stage.phase;
+const activeCase=()=>CASES[stage.caseIndex];
+const questionFor=()=>activeCase()[stage.phase];
+const roomLink=()=>location.origin+location.pathname+'?room='+roomCode+'&v=2';
+const randomCode=()=>String(100000+Math.floor(Math.random()*900000));
+function notice(msg){const n=document.getElementById('message');n.textContent=msg;n.hidden=false;clearTimeout(notice.t);notice.t=setTimeout(()=>n.hidden=true,3100)}
+function uuid(){return (window.crypto?.randomUUID?.()||'dev-'+Math.random().toString(36).slice(2)+'-'+Date.now().toString(36))}
+function resetPeer(){try{connection?.close()}catch(e){} try{peer?.destroy()}catch(e){} peer=null;connection=null;connections.clear();participants.clear();votesByPoll.clear()}
+function hero(){
+ role='home';document.body.classList.remove('teacher-screen');
+ app.innerHTML=`<section class="card hero">
+  <span class="pill">🔴 הגרסה החדשה · לוח כיתה חי</span>
+  <h1>חדר מיון <span style="color:var(--mint)">LIVE</span><br><span style="font-size:.62em">מסך אחד למורה. טלפון לכל צוות.</span></h1>
+  <p>המורה מציג את סרטוני מאיה, נועם ותמר על הלוח. התלמידים בוחרים בטלפונים מה לשאול ומה למדוד, וההתפלגות מופיעה אוטומטית במסך המורה.</p>
+  <div class="actions"><button class="btn primary large" id="goTeacher" style="min-width:240px">🖥️ פתיחת מסך המורה</button><button class="btn large" id="goStudent" style="min-width:240px">📱 כניסת תלמידים</button></div>
+  <div class="instruction" style="margin:30px auto 0;max-width:620px">בלי שם משתמש, בלי סיסמת מורה ובלי ניקוד. למורה נוצר קוד חדר חדש; התלמידים סורקים QR או מזינים את הקוד.</div>
+  <div class="micro" style="margin-top:16px">גרסה 2.0 · מציגים נתונים בזמן אמת, ללא התקנת תוכנה</div>
+ </section>`;
+ document.getElementById('goTeacher').onclick=createTeacher;
+ document.getElementById('goStudent').onclick=()=>studentJoinForm();
+}
+function studentJoinForm(defaultCode=''){
+ role='join';document.body.classList.remove('teacher-screen');
+ app.innerHTML=`<section class="card mobile-card">
+  <span class="pill">📱 מסך תלמיד · גרסה 2</span>
+  <h2 style="margin:16px 0 8px">הצטרפות לשיעור</h2>
+  <p class="muted">הכניסו את הקוד שמופיע על מסך המורה.</p>
+  <label class="label" for="roomInput">קוד החדר</label>
+  <input class="input" id="roomInput" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" placeholder="000000" value="${safe(defaultCode)}">
+  <div style="margin-top:18px"><button id="joinNow" class="btn primary block large">כניסה לחדר ←</button></div>
+  <div class="instruction" id="joinStatus">אין צורך בשם או בהרשמה. הבחירה שלכם תהיה אנונימית.</div>
+  <button class="btn ghost tiny" id="back">חזרה</button>
+ </section>`;
+ document.getElementById('joinNow').onclick=()=>joinStudent(document.getElementById('roomInput').value.trim());
+ document.getElementById('roomInput').onkeydown=e=>{if(e.key==='Enter')joinStudent(e.target.value.trim())};
+ document.getElementById('back').onclick=()=>{resetPeer();hero()};
+}
+function createTeacher(){
+ if(!window.Peer){notice('לא נטען שירות החיבור החי (PeerJS). בדקו את האינטרנט ורעננו.');return}
+ resetPeer();role='teacher';document.body.classList.add('teacher-screen');
+ stage={caseIndex:0,phase:MODE.VIDEO,round:'0:video'};revealResults=true;
+ roomCode=randomCode();
+ app.innerHTML='<section class="card hero"><h2>פותחים חדר חדש...</h2><p class="muted">מתחברים לשירות החיבור החי</p></section>';
+ peer=new Peer(hostId(roomCode),{debug:1});
+ peer.on('open',()=>{renderTeacher()});
+ peer.on('connection',conn=>attachIncoming(conn));
+ peer.on('error',e=>{
+   if(e.type==='unavailable-id'){notice('הקוד תפוס. נפתח חדר אחר.');setTimeout(createTeacher,400);return}
+   notice('בעיית חיבור חי: '+(e.type||'נסו לרענן וליצור חדר חדש'));
+ });
+ peer.on('disconnected',()=>notice('חיבור המורה נותק מהשירות. בדקו אינטרנט.'));
+}
+function attachIncoming(conn){
+ connections.set(conn.peer,conn);
+ conn.on('open',()=>{conn.send({type:'state',...stage});refreshStats()});
+ conn.on('data',data=>{
+  if(!data||typeof data!=='object')return;
+  if(data.type==='hello'&&typeof data.uid==='string'&&data.uid.length<70){
+   conn.studentUid=data.uid;
+   participants.set(data.uid,conn.peer);
+   sendState(conn);refreshStats();return;
+  }
+  if(data.type==='vote'){
+    if(!conn.studentUid||data.round!==getRound()||stage.phase===MODE.VIDEO)return;
+    const q=questionFor();
+    if(!Array.isArray(data.values)||data.values.length!==(stage.phase===MODE.METRICS?2:1))return;
+    if(!data.values.every(i=>Number.isInteger(i)&&i>=0&&i<q.options.length))return;
+    if(new Set(data.values).size!==data.values.length)return;
+    if(!votesByPoll.has(getRound()))votesByPoll.set(getRound(),new Map());
+    votesByPoll.get(getRound()).set(conn.studentUid,[...data.values]);
+    conn.send({type:'saved',round:getRound(),values:data.values});
+    refreshStats();
+  }
+ });
+ conn.on('close',()=>{if(participants.get(conn.studentUid)===conn.peer)participants.delete(conn.studentUid);connections.delete(conn.peer);refreshStats()});
+ conn.on('error',()=>{connections.delete(conn.peer);refreshStats()});
+}
+function sendState(conn){
+ if(!conn||!conn.open)return;
+ const selected=votesByPoll.get(getRound())?.get(conn.studentUid)??null;
+ conn.send({type:'state',...stage,yourVote:selected});
+}
+function broadcastState(){for(const conn of connections.values())sendState(conn)}
+function changeCase(i){
+ if(!Number.isInteger(i)||i<0||i>=CASES.length)return;
+ stage.caseIndex=i;stage.phase=MODE.VIDEO;stage.round=getRound();revealResults=true;broadcastState();renderTeacher();
+}
+function changePhase(p){
+ if(!Object.values(MODE).includes(p))return;
+ stage.phase=p;stage.round=getRound();revealResults=true;broadcastState();renderTeacher();
+}
+function activeConnections(){return [...participants.entries()].filter(([uid,peerID])=>connections.get(peerID)?.open).length}
+function votesNow(){return votesByPoll.get(getRound())||new Map()}
+function renderTeacher(){
+ const c=activeCase(),isVideo=stage.phase===MODE.VIDEO;
+ const hasPoll=!isVideo,question=hasPoll?questionFor():null;
+ const videoBlock=`<div class="viewer"><video controls playsinline preload="metadata" src="${safe(c.video)}" aria-label="סרטון המטופל ${safe(c.name)}">הדפדפן לא תומך בווידאו</video></div>
+ <div class="presenter"><div class="label">סרטון המטופל</div><h2 style="margin:9px 0">${safe(c.name)}, ${c.age}</h2>
+ <p class="muted" style="margin:0">הקרינו את הסרטון והקשיבו לתיאור המקרה. לאחר מכן בחרו שאלה להצבעה.</p></div>`;
+ const questionBlock=`<div class="presenter" style="margin:0 0 18px">
+ <div class="label">${stage.phase===MODE.QUESTION?'שלב א׳ · אנמנזה':'שלב ב׳ · בחירת מדדים'}</div>
+ <h2 style="margin:12px 0">${safe(question?.title)}</h2>
+ <p class="muted" style="margin:0">${stage.phase===MODE.QUESTION?'כל תלמיד בוחר שאלה אחת':'כל תלמיד בוחר שני מדדים'}</p></div>`;
+ app.innerHTML=`<section class="topline">
+  <div class="teacher-pills"><span class="pill">🖥️ מסך מורה · גרסה 2.0</span><span class="pill"><span class="dot good"></span> חדר <b style="direction:ltr">${roomCode}</b></span></div>
+  <div class="row"><button class="btn tiny primary" id="nextStep">▶ לשלב הבא</button><button class="btn tiny ghost" id="fullscreen">⛶ מסך מלא</button><button class="btn tiny ghost" id="newRoom">פתיחת חדר חדש</button></div>
+ </section>
+ <div class="grid teacher-panels">
+  <section class="card">
+   <div class="label">בחרו מטופל</div>
+   <nav class="case-tabs" style="margin-top:10px">${CASES.map((x,i)=>`<button class="btn ${stage.caseIndex===i?'current':''}" data-case="${i}">${safe(x.subtitle)} · ${safe(x.name)}</button>`).join('')}</nav>
+   <div class="label">מה מציגים עכשיו?</div>
+   <nav class="phase-tabs" style="margin-top:10px">
+    <button class="btn ${isVideo?'current':''}" data-phase="video">🎬 הסרטון</button>
+    <button class="btn ${stage.phase===MODE.QUESTION?'current':''}" data-phase="question">❓ מה שואלים?</button>
+    <button class="btn ${stage.phase===MODE.METRICS?'current':''}" data-phase="metrics">🩺 מה מודדים?</button>
+   </nav>
+   ${isVideo?videoBlock:questionBlock}
+   ${hasPoll?`<div class="stats">
+    <div class="stat"><div class="micro">מכשירים מחוברים</div><div class="counter" id="connectedCount">0</div></div>
+    <div class="stat"><div class="micro">ענו לשאלה</div><div class="counter" id="votedCount">0</div></div>
+   </div>
+   <div class="row" style="margin:5px 0 12px"><button id="toggleResults" class="btn primary">${revealResults?'🙈 הסתרת התפלגות':'📊 הצגת ההתפלגות'}</button>
+   <button id="resetVotes" class="btn ghost tiny">איפוס תשובות לשאלה</button></div>
+   <div id="teacherBars"></div>
+   <details style="margin-top:17px"><summary class="summary" style="cursor:pointer">💡 דגש מקצועי לשיחה עם התלמידים</summary><div class="teacher-note">${safe(c.note)}</div></details>`:
+   `<div class="instruction">עברו לכפתור <b>„מה שואלים?”</b> כדי לשלוח לתלמידים את שאלת האנמנזה, או ל<b>„מה מודדים?”</b> לבחירת המדדים.</div>`}
+  </section>
+  <aside class="card">
+   <div class="label">הצטרפות התלמידים</div><h3 style="margin:11px 0 3px">קוד חדר</h3><span class="code">${roomCode}</span>
+   <div class="invite-panel">
+    <div><p class="muted">התלמידים סורקים את הקוד או נכנסים לאותו אתר ומקלידים את קוד החדר. מסך המורה נשאר פתוח לאורך השיעור.</p>
+    <p class="invite-link">${safe(roomLink())}</p>
+    <button class="btn tiny" id="copyLink">📋 העתקת קישור</button></div>
+    <div class="qr-wrap" id="qrcode"></div>
+   </div>
+   <hr class="line"><div class="row"><span class="dot good"></span> <b id="connectedSide">0 מכשירים מחוברים</b></div>
+   <div class="instruction">הטלפונים מצביעים באופן אנונימי. השאלה הנוכחית נשלחת אליהם, ועמודות ההתפלגות משתנות בזמן אמת. אפשר גם להסתיר את התוצאות כדי לפתוח דיון.</div>
+  </aside>
+ </div>`;
+ document.querySelectorAll('[data-case]').forEach(b=>b.onclick=()=>changeCase(Number(b.dataset.case)));
+ document.querySelectorAll('[data-phase]').forEach(b=>b.onclick=()=>changePhase(b.dataset.phase));
+ document.getElementById('nextStep').onclick=()=>{if(stage.phase===MODE.VIDEO)changePhase(MODE.QUESTION);else if(stage.phase===MODE.QUESTION)changePhase(MODE.METRICS);else if(stage.caseIndex<CASES.length-1)changeCase(stage.caseIndex+1);else notice('הגעתם לסוף הפעילות. אפשר לבחור מקרה אחר למעלה.');};
+ document.getElementById('newRoom').onclick=()=>{if(confirm('לפתוח חדר חדש? החדר הנוכחי והתשובות שלו ייסגרו.'))createTeacher()};
+ document.getElementById('fullscreen').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()};
+ document.getElementById('copyLink').onclick=async()=>{try{await navigator.clipboard.writeText(roomLink());notice('קישור הצטרפות הועתק')}catch(e){notice('אפשר להעתיק את הקישור שמופיע על המסך')}};
+ if(hasPoll){
+  document.getElementById('toggleResults').onclick=()=>{revealResults=!revealResults;renderTeacher()};
+  document.getElementById('resetVotes').onclick=()=>{
+   if(!confirm('לאפס את התשובות לשאלה הזו בלבד?'))return;
+   votesByPoll.delete(getRound());broadcastState();refreshStats();
+  };
+ }
+ if(window.QRCode){try{new QRCode(document.getElementById('qrcode'),{text:roomLink(),width:160,height:160,colorDark:'#092236',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})}catch(e){document.getElementById('qrcode').textContent='קוד חדר: '+roomCode}}
+ else document.getElementById('qrcode').textContent='קוד חדר: '+roomCode;
+ refreshStats();
+}
+function refreshStats(){
+ if(role!=='teacher')return;
+ const online=activeConnections(),v=votesNow(),n=v.size;
+ for(const id of ['connectedCount']){const el=document.getElementById(id);if(el)el.textContent=online}
+ const el=document.getElementById('votedCount');if(el)el.textContent=n;
+ const side=document.getElementById('connectedSide');if(side)side.textContent=online+' מכשירים מחוברים';
+ const bars=document.getElementById('teacherBars');
+ if(!bars)return;
+ if(!revealResults){bars.innerHTML='<div class="empty">התפלגות התשובות מוסתרת. לחצו „הצגת ההתפלגות” כדי לפתוח אותה לדיון עם הכיתה.</div>';return}
+ if(!n){bars.innerHTML='<div class="empty">עדיין אין תשובות לשאלה הזו.</div>';return}
+ const q=questionFor();
+ bars.innerHTML=`<div class="micro muted" style="margin:8px 0">אחוזים מתוך ${n} משיבים ${stage.phase===MODE.METRICS?'· כל תלמיד יכול לבחור שני מדדים':''}</div>
+ <div class="bar-stack">${q.options.map((option,i)=>{
+  const count=[...v.values()].filter(arr=>arr.includes(i)).length;
+  const pct=Math.round(count/n*100);
+  return `<div class="answer-card"><div class="answer-title">${safe(option)}</div><div class="answer-num">${count} <small style="font-size:14px;font-weight:600;color:var(--muted)">(${pct}%)</small></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></div>`;
+ }).join('')}</div>`;
+}
+function joinStudent(code){
+ if(!/^\d{6}$/.test(code)){notice('יש להכניס קוד בן 6 ספרות');return}
+ if(!window.Peer){notice('רכיב החיבור לא נטען. בדקו אינטרנט ורעננו את הדף.');return}
+ resetPeer();role='join';roomCode=code;
+ studentId=sessionStorage.getItem('technoda-medlive-student')||uuid();
+ sessionStorage.setItem('technoda-medlive-student',studentId);
+ document.getElementById('joinStatus').textContent='מתחברים לכיתה...';
+ document.getElementById('joinNow').disabled=true;
+ peer=new Peer(undefined,{debug:1});
+ peer.on('open',()=>{
+  connection=peer.connect(hostId(code),{reliable:true});
+  connection.on('open',()=>{connection.send({type:'hello',uid:studentId});notice('התחברתם לכיתה!')});
+  connection.on('data',studentReceive);
+  connection.on('close',()=>lostConnection());
+  connection.on('error',()=>lostConnection());
+ });
+ peer.on('error',e=>{
+  if(e.type==='peer-unavailable')notice('לא נמצא חדר פתוח. בדקו את קוד המורה.');
+  else notice('לא ניתן להתחבר. נסו שוב או בדקו רשת.');
+  studentJoinForm(code);
+ });
+}
+function lostConnection(){
+ if(role==='student'){
+  role='lost';app.innerHTML=`<section class="card mobile-card big-wait"><div class="bubble">📴</div><h2>החיבור למורה נותק</h2><p class="muted">ודאו שהמורה השאיר את מסך החדר פתוח ונסו להיכנס שוב.</p><button class="btn primary" id="retry">חיבור מחדש</button></section>`;
+  document.getElementById('retry').onclick=()=>{studentJoinForm(roomCode);joinStudent(roomCode)};
+ }
+}
+function studentReceive(message){
+ if(!message||typeof message!=='object')return;
+ if(message.type==='state'){
+  const newRound=message.round;
+  if(newRound!==lastRound){mySelected=[];studentVote=null;lastRound=newRound}
+  stage={caseIndex:message.caseIndex,phase:message.phase,round:newRound};
+  studentVote=Array.isArray(message.yourVote)?message.yourVote:null;
+  mySelected=studentVote?[...studentVote]:[];
+  role='student';renderStudent();
+ }else if(message.type==='saved'){
+  if(message.round!==stage.round)return;
+  studentVote=[...message.values];mySelected=[...studentVote];renderStudent();notice('התשובה נקלטה על מסך המורה');
+ }
+}
+function sendVote(values){
+ if(!connection?.open){notice('אין כרגע חיבור למורה');return}
+ connection.send({type:'vote',round:stage.round,values});
+}
+function renderStudent(){
+ document.body.classList.remove('teacher-screen');
+ const c=activeCase();
+ if(stage.phase===MODE.VIDEO){
+  app.innerHTML=`<section class="card mobile-card big-wait"><span class="pill">📱 מחוברים לחדר ${roomCode}</span><div class="bubble">🎬</div><h2>הביטו במסך המורה</h2><p class="muted">כעת מציגים את הסרטון של ${safe(c.name)}. הקשיבו לפרטי המקרה. השאלה תופיע כאן מיד כשהמורה יבחר בה.</p><div class="saved">✓ אתם מחוברים</div></section>`;return;
+ }
+ const q=questionFor(),metrics=stage.phase===MODE.METRICS;
+ app.innerHTML=`<section class="card mobile-card">
+  <div class="topline"><span class="pill">📱 מחוברים · חדר ${roomCode}</span><span class="micro">${safe(c.subtitle)} · ${safe(c.name)}</span></div>
+  <div class="label">${metrics?'בחירת מדדים':'שאלת אנמנזה'}</div><h2 style="margin:9px 0 12px">${safe(q.title)}</h2>
+  <div class="instruction">${metrics?'בחרו עד שני מדדים. אפשר לשנות את הבחירה לפני השליחה.':'לחצו על האפשרות שאתם מעדיפים לשאול קודם. אפשר לשנות את התשובה.'}</div>
+  <div id="studentOptions">${q.options.map((opt,i)=>`<button class="phone-option ${mySelected.includes(i)?'selected':''}" data-option="${i}"><span class="circle">${mySelected.includes(i)?'✓':letters[i]}</span><span>${safe(opt)}</span></button>`).join('')}</div>
+  <div id="submissionArea">${metrics?`<button id="submitMetrics" class="btn primary block large" ${mySelected.length!==2?'disabled':''}>${studentVote?'עדכון הבחירה':'שליחת שני המדדים'}</button>`:studentVote?'<div class="saved">✓ התשובה נקלטה. אפשר לבחור שוב כדי לשנות אותה.</div>':'<div class="micro muted">בחירה באפשרות תשלח את התשובה מיד.</div>'}</div>
+ </section>`;
+ document.querySelectorAll('[data-option]').forEach(b=>b.onclick=()=>{
+  const i=Number(b.dataset.option);
+  if(!metrics){mySelected=[i];sendVote([i]);renderStudent();return}
+  if(mySelected.includes(i))mySelected=mySelected.filter(x=>x!==i);
+  else if(mySelected.length<2)mySelected.push(i);else{notice('אפשר לבחור שני מדדים בלבד');return}
+  renderStudent();
+ });
+ const sendBtn=document.getElementById('submitMetrics');if(sendBtn)sendBtn.onclick=()=>{if(mySelected.length===2)sendVote([...mySelected])};
+}
+window.addEventListener('beforeunload',()=>{try{peer?.destroy()}catch(e){}});
+window.addEventListener('load',()=>{
+ const query=new URLSearchParams(location.search);
+ const join=query.get('room');
+ if(query.get('teacher')==='1')createTeacher();
+ else if(join&&/^\d{6}$/.test(join))studentJoinForm(join);else hero();
+});
+</script>
+</body>
+</html>
