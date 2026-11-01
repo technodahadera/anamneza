@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#08223a">
-<title>חדר מיון LIVE | מסך מורה ותלמיד • גרסה 2</title>
+<title>חדר מיון LIVE | גרסה 3.0 • חיבור חדש</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -71,283 +71,192 @@ h1,h2,h3,p{margin-top:0}h1{font-size:clamp(32px,4.5vw,67px);line-height:1.17;let
 @media(max-width:900px){.grid2,.teacher-panels{grid-template-columns:1fr}.invite-panel{grid-template-columns:1fr}.qr-wrap{margin:auto}.case-tabs,.phase-tabs{flex-wrap:wrap}.case-tabs .btn,.phase-tabs .btn{flex:auto}}
 @media(max-width:580px){.container{width:calc(100% - 22px)}header{padding:16px 0}.logo{font-size:20px}.med-symbol{width:38px;height:38px;font-size:19px}.card{padding:17px;border-radius:18px}.hero{padding:38px 18px}.hero h1{font-size:36px}.hero p{font-size:15px}.btn.large{font-size:16px}.mobile-card{padding:19px}.code{font-size:38px;letter-spacing:6px}.topline{align-items:flex-start}.teacher-pills{gap:6px}.phone-option{font-size:15px}.stat{min-width:110px;padding:10px}}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.5/peerjs.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
-</head>
-<body>
+<style>
+.status-ribbon{font-weight:700;display:inline-flex;gap:8px;align-items:center;border:1px solid #396674;background:#174454;border-radius:999px;padding:7px 14px;color:#ddf5f0}
+.status-ribbon.ok{border-color:#52b9a6;background:#153f38;color:#b7f6e4}.status-ribbon.bad{border-color:#d7886b;background:#4c2929;color:#ffe3d4}
+.notice-big{background:#193e4c;border-right:4px solid #fed58e;border-radius:14px;padding:18px;line-height:1.7}
+.teachershow{background:#fff0be;color:#163849;font-size:13px;font-weight:800;border-radius:8px;padding:4px 9px}
+.loading-circle{width:28px;height:28px;border-radius:50%;border:3px solid #5ac4b0;border-right-color:transparent;display:inline-block;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.join-error{color:#ffccbd;font-weight:700;padding:14px;border:1px solid #faab8c;border-radius:12px;margin:16px 0}
+</style>
+</head><body>
 <div class="container">
-<header>
- <div class="logo"><span class="med-symbol">🩺</span><span>חדר מיון <b>LIVE</b><div class="micro">מורה שואל · תלמידים בוחרים · הכיתה דנה</div></span></div>
- <span class="pill" style="border-color:#4af5c5;color:#4af5c5">גרסה 2.0 · פשוטה · טכנודע</span>
-</header>
+<header><div class="logo"><span class="med-symbol">🩺</span><span>חדר מיון <b>LIVE</b><div class="micro">המורה מציג · הכיתה בוחרת · רואים את ההתפלגות</div></span></div><span class="pill" style="border-color:#4af5c5;color:#4af5c5">גרסה 3.0 · חיבור חי חדש</span></header>
 <main id="app" aria-live="polite"></main>
-<div class="foot">גרסה 2.0 · מקרים רפואיים בדויים ללמידה · החיבור החי משתמש בשירות PeerJS ובאינטרנט פעיל</div>
-</div>
-<div id="message" role="status" hidden></div>
+<div class="foot">טכנודע · סימולציה פדגוגית של מקרים בדויים בלבד · בלי שמות תלמידים, בלי נתונים רפואיים אישיים · משתמש בשירות ntfy.sh להצבעה אנונימית</div>
+</div><div id="message" role="status" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 'use strict';
-// TECHNODA MEDLIVE SIMPLE v2.0 - 2026-11-01; replace the entire GitHub Pages index.html with this file.
-
+// TECHNODA MEDLIVE V3 - 2026-11-01. One static index.html for GitHub Pages.
+// Public relay (ntfy.sh) for anonymous classroom votes. No PeerJS, no database account.
 const CASES = [{"id":"maya","name":"מאיה","age":13,"subtitle":"תיק 01","title":"קשיי נשימה לאחר ריצה","video":"https://res.cloudinary.com/gstuiyt9/video/upload/v1793520502/%D7%9E%D7%A7%D7%A8%D7%94_%D7%9E%D7%90%D7%99%D7%94.mp4","question":{"title":"איזו שאלה הייתם שואלים את מאיה קודם?","options":["האם את מצליחה לדבר במשפטים שלמים ולנשום גם במנוחה?","האם הרגשת קושי דומה בעבר?","האם יש משהו מסוים שמחמיר את התחושה?","האם את נוטלת תרופות או משתמשת במשאף?"]},"metrics":{"title":"אילו שני מדדים הייתם בוחרים לבדוק קודם?","options":["סטורציה (ריווי חמצן)","קצב הנשימה","דופק","לחץ דם","חום גוף","רפלקסים"]},"note":"בקשיי נשימה חשוב להעריך תחילה את חומרת המצוקה. קצב נשימה, סטורציה ודופק יכולים לסייע, אך אינם קובעים לבדם אבחנה. אם יש קושי ניכר בדיבור או בנשימה, נדרשת הערכה רפואית דחופה."},{"id":"noam","name":"נועם","age":14,"subtitle":"תיק 02","title":"סחרחורת לאחר פעילות בשמש","video":"https://res.cloudinary.com/gstuiyt9/video/upload/v1793520502/%D7%9E%D7%A7%D7%A8%D7%94_%D7%A0%D7%95%D7%A2%D7%9D.mp4","question":{"title":"איזו שאלה הייתם שואלים את נועם קודם?","options":["האם איבדת הכרה, נפלת או נפגעת בראש?","כמה מים שתית היום?","מתי אכלת לאחרונה?","האם הרגשת סחרחורת דומה בעבר?"]},"metrics":{"title":"אילו שני מדדים הייתם בוחרים לבדוק קודם?","options":["דופק","לחץ דם","חום גוף","סטורציה (ריווי חמצן)","קצב הנשימה","רפלקסים"]},"note":"בסחרחורת אחרי מאמץ יש לברר תחילה עילפון, חבלה וסימני אזהרה. מדדים יכולים להוסיף מידע, לצד שאלות על שתייה, אכילה וחשיפה לחום. אין להסיק שהתייבשות היא בהכרח הסיבה."},{"id":"tamar","name":"תמר","age":13,"subtitle":"תיק 03","title":"חום וכאב גרון","video":"https://res.cloudinary.com/gstuiyt9/video/upload/v1793518406/%D7%9E%D7%A7%D7%A8%D7%94_%D7%AA%D7%9E%D7%A8.mp4","question":{"title":"איזו שאלה הייתם שואלים את תמר קודם?","options":["האם את מצליחה לבלוע רוק ולנשום כרגיל?","מתי בדיוק התחיל כאב הגרון?","האם מופיע גם שיעול?","האם היו אנשים חולים בסביבתך?"]},"metrics":{"title":"אילו שני מדדים הייתם בוחרים לבדוק קודם?","options":["חום גוף","דופק","סטורציה (ריווי חמצן)","קצב הנשימה","לחץ דם","רפלקסים"]},"note":"כאב גרון וחום דורשים בירור, ובפרט חשוב לזהות קושי בנשימה או בבליעת רוק כסימני אזהרה. חום, דופק ומדדים נוספים מתארים את המצב, אך אינם מבחינים לבדם בין הגורמים האפשריים."}];
-const MODE = { VIDEO:'video', QUESTION:'question', METRICS:'metrics' };
-let role = 'home', peer=null, connection=null, roomCode='', stage={caseIndex:0,phase:MODE.VIDEO,round:'0:video'};
-let connections=new Map(), participants=new Map(), votesByPoll=new Map();
-let revealResults=true, studentId='', mySelected=[], studentVote=null, lastRound='', activeCount=0;
+
+const MODE={VIDEO:'video',QUESTION:'question',METRICS:'metrics'};
 const app=document.getElementById('app');
-const letters='אבגדהוזחט';
-const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const hostId=c=>'technoda-medlive-'+c;
-const getRound=()=>stage.caseIndex+':'+stage.phase;
-const activeCase=()=>CASES[stage.caseIndex];
-const questionFor=()=>activeCase()[stage.phase];
-const roomLink=()=>location.origin+location.pathname+'?room='+roomCode+'&v=2';
-const randomCode=()=>String(100000+Math.floor(Math.random()*900000));
-function notice(msg){const n=document.getElementById('message');n.textContent=msg;n.hidden=false;clearTimeout(notice.t);notice.t=setTimeout(()=>n.hidden=true,3100)}
-function uuid(){return (window.crypto?.randomUUID?.()||'dev-'+Math.random().toString(36).slice(2)+'-'+Date.now().toString(36))}
-function resetPeer(){try{connection?.close()}catch(e){} try{peer?.destroy()}catch(e){} peer=null;connection=null;connections.clear();participants.clear();votesByPoll.clear()}
-function hero(){
- role='home';document.body.classList.remove('teacher-screen');
- app.innerHTML=`<section class="card hero">
-  <span class="pill">🔴 הגרסה החדשה · לוח כיתה חי</span>
-  <h1>חדר מיון <span style="color:var(--mint)">LIVE</span><br><span style="font-size:.62em">מסך אחד למורה. טלפון לכל צוות.</span></h1>
-  <p>המורה מציג את סרטוני מאיה, נועם ותמר על הלוח. התלמידים בוחרים בטלפונים מה לשאול ומה למדוד, וההתפלגות מופיעה אוטומטית במסך המורה.</p>
-  <div class="actions"><button class="btn primary large" id="goTeacher" style="min-width:240px">🖥️ פתיחת מסך המורה</button><button class="btn large" id="goStudent" style="min-width:240px">📱 כניסת תלמידים</button></div>
-  <div class="instruction" style="margin:30px auto 0;max-width:620px">בלי שם משתמש, בלי סיסמת מורה ובלי ניקוד. למורה נוצר קוד חדר חדש; התלמידים סורקים QR או מזינים את הקוד.</div>
-  <div class="micro" style="margin-top:16px">גרסה 2.0 · מציגים נתונים בזמן אמת, ללא התקנת תוכנה</div>
- </section>`;
- document.getElementById('goTeacher').onclick=createTeacher;
- document.getElementById('goStudent').onclick=()=>studentJoinForm();
+const safe=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const choiceLetters='אבגדהוזחט';
+let role='home',room='',session='',stage={caseIndex:0,phase:MODE.VIDEO,round:'0:video'};
+let es=null,healthTimer=null,connectionState='connecting',lastState=0,joinVerified=false;
+let people=new Map(),votes=new Map(),myVote=[],mySent=null,myStage='',myId='';
+const topic=(code)=>`https://ntfy.sh/technoda-medlive-2026-${code}`;
+const classUrl=()=>location.origin+location.pathname+'?room='+room+'&v=3';
+const currentCase=()=>CASES[stage.caseIndex];
+const curQuestion=()=>currentCase()[stage.phase];
+const currentRound=()=>`${stage.caseIndex}:${stage.phase}`;
+const randomDigits=()=>String(100000+Math.floor(Math.random()*900000));
+const uuid=()=>window.crypto?.randomUUID?.()||`${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`;
+const milliseconds=()=>Date.now();
+function toast(message){const n=document.getElementById('message');n.hidden=false;n.textContent=message;clearTimeout(toast.timer);toast.timer=setTimeout(()=>n.hidden=true,4800)}
+function cleanup(){try{es?.close()}catch(e){}if(healthTimer)clearInterval(healthTimer);es=null;healthTimer=null;role='home';people.clear();votes.clear();lastState=0;joinVerified=false;}
+async function send(message){
+ const result=await fetch(topic(room),{method:'POST',body:JSON.stringify({...message,app:'technoda-medlive-v3',room,t:milliseconds()}),cache:'no-store'});
+ if(!result.ok)throw new Error('HTTP '+result.status);
+ return true;
 }
-function studentJoinForm(defaultCode=''){
- role='join';document.body.classList.remove('teacher-screen');
- app.innerHTML=`<section class="card mobile-card">
-  <span class="pill">📱 מסך תלמיד · גרסה 2</span>
-  <h2 style="margin:16px 0 8px">הצטרפות לשיעור</h2>
-  <p class="muted">הכניסו את הקוד שמופיע על מסך המורה.</p>
-  <label class="label" for="roomInput">קוד החדר</label>
-  <input class="input" id="roomInput" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" placeholder="000000" value="${safe(defaultCode)}">
-  <div style="margin-top:18px"><button id="joinNow" class="btn primary block large">כניסה לחדר ←</button></div>
-  <div class="instruction" id="joinStatus">אין צורך בשם או בהרשמה. הבחירה שלכם תהיה אנונימית.</div>
-  <button class="btn ghost tiny" id="back">חזרה</button>
- </section>`;
- document.getElementById('joinNow').onclick=()=>joinStudent(document.getElementById('roomInput').value.trim());
- document.getElementById('roomInput').onkeydown=e=>{if(e.key==='Enter')joinStudent(e.target.value.trim())};
- document.getElementById('back').onclick=()=>{resetPeer();hero()};
+function listen(onMessage,onOpen,onError,history='90s'){
+ const stream=new EventSource(topic(room)+'/sse?since='+history);
+ stream.onopen=()=>onOpen?.();
+ stream.onmessage=e=>{try{const env=JSON.parse(e.data);if(env.event!=='message')return;const m=JSON.parse(env.message);if(m.app==='technoda-medlive-v3'&&m.room===room&&Math.abs(milliseconds()-m.t)<150000)onMessage(m)}catch(err){}};
+ stream.onerror=()=>onError?.();
+ return stream;
 }
-function createTeacher(){
- if(!window.Peer){notice('לא נטען שירות החיבור החי (PeerJS). בדקו את האינטרנט ורעננו.');return}
- resetPeer();role='teacher';document.body.classList.add('teacher-screen');
- stage={caseIndex:0,phase:MODE.VIDEO,round:'0:video'};revealResults=true;
- roomCode=randomCode();
- app.innerHTML='<section class="card hero"><h2>פותחים חדר חדש...</h2><p class="muted">מתחברים לשירות החיבור החי</p></section>';
- peer=new Peer(hostId(roomCode),{debug:1});
- peer.on('open',()=>{renderTeacher()});
- peer.on('connection',conn=>attachIncoming(conn));
- peer.on('error',e=>{
-   if(e.type==='unavailable-id'){notice('הקוד תפוס. נפתח חדר אחר.');setTimeout(createTeacher,400);return}
-   notice('בעיית חיבור חי: '+(e.type||'נסו לרענן וליצור חדר חדש'));
- });
- peer.on('disconnected',()=>notice('חיבור המורה נותק מהשירות. בדקו אינטרנט.'));
+function hero(){cleanup();document.body.classList.remove('teacher-screen');app.innerHTML=`<section class="card hero">
+ <span class="pill">חדש · גרסה 3.0 · חיבור ללא PeerJS</span><h1>חדר מיון <span style="color:var(--mint)">LIVE</span></h1>
+ <p>המורה מציג סרטון ושאלה. כל תלמיד בוחר בטלפון שאלה או שני מדדים. מסך המורה מציג מיד כמה בחרו בכל אפשרות.</p>
+ <div class="actions"><button class="btn primary large" id="teacherEnter">🖥️ מסך המורה</button><button class="btn large" id="studentEnter">📱 מסך התלמיד</button></div>
+ <div class="instruction" style="margin-top:30px">בלי ניקוד ובלי הרשמה. נדרשת גישה לאינטרנט בשני המכשירים.</div></section>`;
+ document.getElementById('teacherEnter').onclick=startTeacher;
+ document.getElementById('studentEnter').onclick=()=>joinForm();
 }
-function attachIncoming(conn){
- connections.set(conn.peer,conn);
- conn.on('open',()=>{conn.send({type:'state',...stage});refreshStats()});
- conn.on('data',data=>{
-  if(!data||typeof data!=='object')return;
-  if(data.type==='hello'&&typeof data.uid==='string'&&data.uid.length<70){
-   conn.studentUid=data.uid;
-   participants.set(data.uid,conn.peer);
-   sendState(conn);refreshStats();return;
+function joinForm(preset=''){
+ cleanup();role='join';document.body.classList.remove('teacher-screen');room=preset;
+ app.innerHTML=`<section class="card mobile-card"><span class="pill">📱 מסך תלמיד · 3.0</span><h2>התחברות לשיעור</h2>
+ <p class="muted">סרקתם את הברקוד? הקוד כבר רשום כאן. לחצו על "כניסה לחדר".</p><label class="label" for="code">קוד החדר</label>
+ <input id="code" class="input" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="off" value="${safe(preset)}">
+ <button class="btn primary block large" id="enter" style="margin-top:18px">כניסה לחדר</button>
+ <div id="joinInfo" class="instruction">המורה צריך להשאיר את מסך החדר פתוח ולהראות את המילה ״מחובר״.</div>
+ <button class="btn ghost tiny" id="back" style="margin-top:14px">חזרה</button></section>`;
+ document.getElementById('enter').onclick=()=>startStudent(document.getElementById('code').value.trim());
+ document.getElementById('back').onclick=hero;
+ document.getElementById('code').addEventListener('keydown',e=>{if(e.key==='Enter')startStudent(e.target.value.trim())});
+}
+function setTeacherStatus(value,text){connectionState=value;const el=document.getElementById('relay-status');if(el){el.textContent=text;el.className='status-ribbon '+(value==='ok'?'ok':value==='bad'?'bad':'')}}
+async function announce(){if(role!=='teacher'||!room)return;await send({type:'state',session,caseIndex:stage.caseIndex,phase:stage.phase,round:currentRound()})}
+function startTeacher(){
+ cleanup();role='teacher';document.body.classList.add('teacher-screen');room=randomDigits();session=uuid();stage={caseIndex:0,phase:MODE.VIDEO};
+ app.innerHTML='<section class="card hero"><div class="loading-circle"></div><h2>מחברים את מסך המורה...</h2><p class="muted">נא לא לסרוק לפני הופעת קוד החדר.</p></section>';
+ es=listen(m=>{
+  if(m.session!==session)return;
+  if(m.type==='hello'&&typeof m.id==='string'&&m.id.length<90){people.set(m.id,milliseconds());refreshBars()}
+  if(m.type==='vote'&&m.round===currentRound()&&typeof m.id==='string'&&m.id.length<90){
+    const opts=curQuestion()?.options||[];
+    if(!Array.isArray(m.values)||m.values.length!==(stage.phase===MODE.METRICS?2:1))return;
+    if(!m.values.every(v=>Number.isInteger(v)&&v>=0&&v<opts.length)||new Set(m.values).size!==m.values.length)return;
+    people.set(m.id,milliseconds());votes.set(m.id,m.values);refreshBars();
   }
-  if(data.type==='vote'){
-    if(!conn.studentUid||data.round!==getRound()||stage.phase===MODE.VIDEO)return;
-    const q=questionFor();
-    if(!Array.isArray(data.values)||data.values.length!==(stage.phase===MODE.METRICS?2:1))return;
-    if(!data.values.every(i=>Number.isInteger(i)&&i>=0&&i<q.options.length))return;
-    if(new Set(data.values).size!==data.values.length)return;
-    if(!votesByPoll.has(getRound()))votesByPoll.set(getRound(),new Map());
-    votesByPoll.get(getRound()).set(conn.studentUid,[...data.values]);
-    conn.send({type:'saved',round:getRound(),values:data.values});
-    refreshStats();
-  }
- });
- conn.on('close',()=>{if(participants.get(conn.studentUid)===conn.peer)participants.delete(conn.studentUid);connections.delete(conn.peer);refreshStats()});
- conn.on('error',()=>{connections.delete(conn.peer);refreshStats()});
+ },async()=>{
+    if(role!=='teacher')return;
+    setTeacherStatus('ok','🟢 מחובר · אפשר לסרוק');
+    try{await announce()}catch(e){setTeacherStatus('bad','🔴 תקלה בפרסום החדר');toast('שירות ההצבעה לא מגיב. בדקו אינטרנט והאם ntfy.sh זמין.')}
+    if(!document.getElementById('teacherMain'))renderTeacher();
+ },()=>{if(role==='teacher')setTeacherStatus('bad','🔴 אין חיבור לשירות ההצבעה')},'30s');
+ // Periodically refresh the classroom state; allows students joining late to find an active room.
+ healthTimer=setInterval(async()=>{if(role!=='teacher'||connectionState!=='ok')return;try{await announce()}catch(e){setTeacherStatus('bad','🔴 אין חיבור לשירות ההצבעה')}},25000);
 }
-function sendState(conn){
- if(!conn||!conn.open)return;
- const selected=votesByPoll.get(getRound())?.get(conn.studentUid)??null;
- conn.send({type:'state',...stage,yourVote:selected});
-}
-function broadcastState(){for(const conn of connections.values())sendState(conn)}
-function changeCase(i){
- if(!Number.isInteger(i)||i<0||i>=CASES.length)return;
- stage.caseIndex=i;stage.phase=MODE.VIDEO;stage.round=getRound();revealResults=true;broadcastState();renderTeacher();
-}
-function changePhase(p){
- if(!Object.values(MODE).includes(p))return;
- stage.phase=p;stage.round=getRound();revealResults=true;broadcastState();renderTeacher();
-}
-function activeConnections(){return [...participants.entries()].filter(([uid,peerID])=>connections.get(peerID)?.open).length}
-function votesNow(){return votesByPoll.get(getRound())||new Map()}
+function setCase(i){if(i===stage.caseIndex)return;stage={caseIndex:i,phase:MODE.VIDEO};votes.clear();renderTeacher();announce().catch(()=>toast('לא הצלחנו לעדכן את שלב התלמידים'))}
+function setPhase(p){if(stage.phase===p)return;stage.phase=p;votes.clear();renderTeacher();announce().catch(()=>toast('לא הצלחנו לעדכן את שלב התלמידים'))}
 function renderTeacher(){
- const c=activeCase(),isVideo=stage.phase===MODE.VIDEO;
- const hasPoll=!isVideo,question=hasPoll?questionFor():null;
- const videoBlock=`<div class="viewer"><video controls playsinline preload="metadata" src="${safe(c.video)}" aria-label="סרטון המטופל ${safe(c.name)}">הדפדפן לא תומך בווידאו</video></div>
- <div class="presenter"><div class="label">סרטון המטופל</div><h2 style="margin:9px 0">${safe(c.name)}, ${c.age}</h2>
- <p class="muted" style="margin:0">הקרינו את הסרטון והקשיבו לתיאור המקרה. לאחר מכן בחרו שאלה להצבעה.</p></div>`;
- const questionBlock=`<div class="presenter" style="margin:0 0 18px">
- <div class="label">${stage.phase===MODE.QUESTION?'שלב א׳ · אנמנזה':'שלב ב׳ · בחירת מדדים'}</div>
- <h2 style="margin:12px 0">${safe(question?.title)}</h2>
- <p class="muted" style="margin:0">${stage.phase===MODE.QUESTION?'כל תלמיד בוחר שאלה אחת':'כל תלמיד בוחר שני מדדים'}</p></div>`;
- app.innerHTML=`<section class="topline">
-  <div class="teacher-pills"><span class="pill">🖥️ מסך מורה · גרסה 2.0</span><span class="pill"><span class="dot good"></span> חדר <b style="direction:ltr">${roomCode}</b></span></div>
-  <div class="row"><button class="btn tiny primary" id="nextStep">▶ לשלב הבא</button><button class="btn tiny ghost" id="fullscreen">⛶ מסך מלא</button><button class="btn tiny ghost" id="newRoom">פתיחת חדר חדש</button></div>
- </section>
- <div class="grid teacher-panels">
-  <section class="card">
-   <div class="label">בחרו מטופל</div>
-   <nav class="case-tabs" style="margin-top:10px">${CASES.map((x,i)=>`<button class="btn ${stage.caseIndex===i?'current':''}" data-case="${i}">${safe(x.subtitle)} · ${safe(x.name)}</button>`).join('')}</nav>
-   <div class="label">מה מציגים עכשיו?</div>
-   <nav class="phase-tabs" style="margin-top:10px">
-    <button class="btn ${isVideo?'current':''}" data-phase="video">🎬 הסרטון</button>
-    <button class="btn ${stage.phase===MODE.QUESTION?'current':''}" data-phase="question">❓ מה שואלים?</button>
-    <button class="btn ${stage.phase===MODE.METRICS?'current':''}" data-phase="metrics">🩺 מה מודדים?</button>
-   </nav>
-   ${isVideo?videoBlock:questionBlock}
-   ${hasPoll?`<div class="stats">
-    <div class="stat"><div class="micro">מכשירים מחוברים</div><div class="counter" id="connectedCount">0</div></div>
-    <div class="stat"><div class="micro">ענו לשאלה</div><div class="counter" id="votedCount">0</div></div>
-   </div>
-   <div class="row" style="margin:5px 0 12px"><button id="toggleResults" class="btn primary">${revealResults?'🙈 הסתרת התפלגות':'📊 הצגת ההתפלגות'}</button>
-   <button id="resetVotes" class="btn ghost tiny">איפוס תשובות לשאלה</button></div>
-   <div id="teacherBars"></div>
-   <details style="margin-top:17px"><summary class="summary" style="cursor:pointer">💡 דגש מקצועי לשיחה עם התלמידים</summary><div class="teacher-note">${safe(c.note)}</div></details>`:
-   `<div class="instruction">עברו לכפתור <b>„מה שואלים?”</b> כדי לשלוח לתלמידים את שאלת האנמנזה, או ל<b>„מה מודדים?”</b> לבחירת המדדים.</div>`}
-  </section>
-  <aside class="card">
-   <div class="label">הצטרפות התלמידים</div><h3 style="margin:11px 0 3px">קוד חדר</h3><span class="code">${roomCode}</span>
-   <div class="invite-panel">
-    <div><p class="muted">התלמידים סורקים את הקוד או נכנסים לאותו אתר ומקלידים את קוד החדר. מסך המורה נשאר פתוח לאורך השיעור.</p>
-    <p class="invite-link">${safe(roomLink())}</p>
-    <button class="btn tiny" id="copyLink">📋 העתקת קישור</button></div>
-    <div class="qr-wrap" id="qrcode"></div>
-   </div>
-   <hr class="line"><div class="row"><span class="dot good"></span> <b id="connectedSide">0 מכשירים מחוברים</b></div>
-   <div class="instruction">הטלפונים מצביעים באופן אנונימי. השאלה הנוכחית נשלחת אליהם, ועמודות ההתפלגות משתנות בזמן אמת. אפשר גם להסתיר את התוצאות כדי לפתוח דיון.</div>
-  </aside>
- </div>`;
- document.querySelectorAll('[data-case]').forEach(b=>b.onclick=()=>changeCase(Number(b.dataset.case)));
- document.querySelectorAll('[data-phase]').forEach(b=>b.onclick=()=>changePhase(b.dataset.phase));
- document.getElementById('nextStep').onclick=()=>{if(stage.phase===MODE.VIDEO)changePhase(MODE.QUESTION);else if(stage.phase===MODE.QUESTION)changePhase(MODE.METRICS);else if(stage.caseIndex<CASES.length-1)changeCase(stage.caseIndex+1);else notice('הגעתם לסוף הפעילות. אפשר לבחור מקרה אחר למעלה.');};
- document.getElementById('newRoom').onclick=()=>{if(confirm('לפתוח חדר חדש? החדר הנוכחי והתשובות שלו ייסגרו.'))createTeacher()};
- document.getElementById('fullscreen').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()};
- document.getElementById('copyLink').onclick=async()=>{try{await navigator.clipboard.writeText(roomLink());notice('קישור הצטרפות הועתק')}catch(e){notice('אפשר להעתיק את הקישור שמופיע על המסך')}};
- if(hasPoll){
-  document.getElementById('toggleResults').onclick=()=>{revealResults=!revealResults;renderTeacher()};
-  document.getElementById('resetVotes').onclick=()=>{
-   if(!confirm('לאפס את התשובות לשאלה הזו בלבד?'))return;
-   votesByPoll.delete(getRound());broadcastState();refreshStats();
-  };
- }
- if(window.QRCode){try{new QRCode(document.getElementById('qrcode'),{text:roomLink(),width:160,height:160,colorDark:'#092236',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})}catch(e){document.getElementById('qrcode').textContent='קוד חדר: '+roomCode}}
- else document.getElementById('qrcode').textContent='קוד חדר: '+roomCode;
- refreshStats();
+ const c=currentCase(),isVideo=stage.phase===MODE.VIDEO,question=isVideo?null:curQuestion();
+ app.innerHTML=`<section id="teacherMain"><div class="topline"><div class="row">
+ <span class="pill">🖥️ מורה · גרסה 3.0</span> <span id="relay-status" class="status-ribbon ${connectionState==='ok'?'ok':'bad'}">${connectionState==='ok'?'🟢 מחובר · אפשר לסרוק':'🔴 אין חיבור לשירות ההצבעה'}</span>
+ </div><div class="row"><button class="btn primary tiny" id="next">▶ לשלב הבא</button><button class="btn tiny ghost" id="full">⛶ מסך מלא</button><button class="btn tiny ghost" id="restart">חדר חדש</button></div></div>
+ <div class="grid teacher-panels"><section class="card"><div class="label">בחרו את המטופל</div>
+ <div class="case-tabs" style="margin:10px 0 18px">${CASES.map((a,i)=>`<button class="btn ${i===stage.caseIndex?'current':''}" data-case="${i}">${safe(a.name)}</button>`).join('')}</div>
+ <div class="label">מה מציגים לכיתה?</div><div class="phase-tabs" style="margin:10px 0 18px">
+ <button class="btn ${isVideo?'current':''}" data-phase="video">🎬 סרטון</button>
+ <button class="btn ${stage.phase===MODE.QUESTION?'current':''}" data-phase="question">❓ מה נשאל?</button>
+ <button class="btn ${stage.phase===MODE.METRICS?'current':''}" data-phase="metrics">🩺 מה נמדוד?</button></div>
+ ${isVideo?`<div class="viewer"><video controls playsinline preload="metadata" src="${safe(c.video)}"></video></div>
+ <h2>${safe(c.name)}, בן/בת ${c.age}</h2><div class="instruction">הציגו את הסרטון לכיתה. לאחריו לחצו על ״מה נשאל?״ כדי להתחיל בהצבעה.</div>`:
+ `<h2>${safe(question.title)}</h2><p class="muted">${stage.phase===MODE.METRICS?'כל תלמיד בוחר בדיוק שני מדדים':'כל תלמיד בוחר אפשרות אחת'}</p>
+ <div class="stats"><div class="stat"><div class="micro">הצטרפו לחדר</div><div id="people" class="counter">0</div></div>
+ <div class="stat"><div class="micro">ענו לשאלה</div><div id="voted" class="counter">0</div></div></div>
+ <div id="teacherBars"></div><details style="margin-top:15px"><summary>💡 דגש לדיון</summary><div class="teacher-note">${safe(c.note)}</div></details>`}</section>
+ <aside class="card"><div class="label">התלמידים נכנסים לטלפון</div><h3>קוד חדר</h3><span class="code">${room}</span>
+ <div class="invite-panel"><div><p class="muted">סרקו את הקוד או הקלידו את קוד החדר באותו אתר.</p><p class="invite-link">${safe(classUrl())}</p>
+ <button class="btn tiny" id="copy">העתקת קישור</button></div><div class="qr-wrap" id="qrcode"></div></div>
+ <hr class="line"><p class="muted">ודאו שהחיווי למעלה ירוק. השאירו את לשונית המורה פתוחה בזמן התשובות.</p><div class="instruction">ההתפלגות על המסך מתעדכנת אוטומטית. אין צורך לחשוף תשובות נכונות.</div></aside></div></section>`;
+ document.querySelectorAll('[data-case]').forEach(e=>e.onclick=()=>setCase(Number(e.dataset.case)));
+ document.querySelectorAll('[data-phase]').forEach(e=>e.onclick=()=>setPhase(e.dataset.phase));
+ document.getElementById('next').onclick=()=>{if(stage.phase===MODE.VIDEO)setPhase(MODE.QUESTION);else if(stage.phase===MODE.QUESTION)setPhase(MODE.METRICS);else if(stage.caseIndex<2)setCase(stage.caseIndex+1);else toast('סיימתם את שלושת המקרים')};
+ document.getElementById('full').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()};
+ document.getElementById('restart').onclick=()=>{if(confirm('חדר חדש יסגור את ההצבעה הנוכחית. להמשיך?'))startTeacher()};
+ document.getElementById('copy').onclick=()=>navigator.clipboard?.writeText(classUrl()).then(()=>toast('הקישור הועתק')).catch(()=>toast('העתיקו את הקישור ידנית'));
+ const qr=document.getElementById('qrcode');if(window.QRCode){new QRCode(qr,{text:classUrl(),width:160,height:160,colorDark:'#092236',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.M})}else qr.textContent=room;
+ refreshBars();
 }
-function refreshStats(){
- if(role!=='teacher')return;
- const online=activeConnections(),v=votesNow(),n=v.size;
- for(const id of ['connectedCount']){const el=document.getElementById(id);if(el)el.textContent=online}
- const el=document.getElementById('votedCount');if(el)el.textContent=n;
- const side=document.getElementById('connectedSide');if(side)side.textContent=online+' מכשירים מחוברים';
- const bars=document.getElementById('teacherBars');
- if(!bars)return;
- if(!revealResults){bars.innerHTML='<div class="empty">התפלגות התשובות מוסתרת. לחצו „הצגת ההתפלגות” כדי לפתוח אותה לדיון עם הכיתה.</div>';return}
- if(!n){bars.innerHTML='<div class="empty">עדיין אין תשובות לשאלה הזו.</div>';return}
- const q=questionFor();
- bars.innerHTML=`<div class="micro muted" style="margin:8px 0">אחוזים מתוך ${n} משיבים ${stage.phase===MODE.METRICS?'· כל תלמיד יכול לבחור שני מדדים':''}</div>
- <div class="bar-stack">${q.options.map((option,i)=>{
-  const count=[...v.values()].filter(arr=>arr.includes(i)).length;
-  const pct=Math.round(count/n*100);
-  return `<div class="answer-card"><div class="answer-title">${safe(option)}</div><div class="answer-num">${count} <small style="font-size:14px;font-weight:600;color:var(--muted)">(${pct}%)</small></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></div>`;
+function refreshBars(){if(role!=='teacher')return;
+ const p=document.getElementById('people');if(p)p.textContent=people.size;
+ const v=document.getElementById('voted');if(v)v.textContent=votes.size;
+ const el=document.getElementById('teacherBars');if(!el)return;
+ if(!votes.size){el.innerHTML='<div class="empty">עדיין אין תשובות. בחרו תשובה מהטלפון והעמודות יופיעו כאן.</div>';return}
+ const q=curQuestion(),n=votes.size;
+ el.innerHTML=`<p class="micro">${n} תלמידים ענו ${stage.phase===MODE.METRICS?'· כל תלמיד בחר שני מדדים':''}</p><div class="bar-stack">${q.options.map((opt,i)=>{
+  const count=[...votes.values()].filter(arr=>arr.includes(i)).length,pct=Math.round(count/n*100);
+  return `<div class="answer-card"><div class="answer-title">${safe(opt)}</div><div class="answer-num">${count} <small>(${pct}%)</small></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></div>`
  }).join('')}</div>`;
 }
-function joinStudent(code){
- if(!/^\d{6}$/.test(code)){notice('יש להכניס קוד בן 6 ספרות');return}
- if(!window.Peer){notice('רכיב החיבור לא נטען. בדקו אינטרנט ורעננו את הדף.');return}
- resetPeer();role='join';roomCode=code;
- studentId=sessionStorage.getItem('technoda-medlive-student')||uuid();
- sessionStorage.setItem('technoda-medlive-student',studentId);
- document.getElementById('joinStatus').textContent='מתחברים לכיתה...';
- document.getElementById('joinNow').disabled=true;
- peer=new Peer(undefined,{debug:1});
- peer.on('open',()=>{
-  connection=peer.connect(hostId(code),{reliable:true});
-  connection.on('open',()=>{connection.send({type:'hello',uid:studentId});notice('התחברתם לכיתה!')});
-  connection.on('data',studentReceive);
-  connection.on('close',()=>lostConnection());
-  connection.on('error',()=>lostConnection());
- });
- peer.on('error',e=>{
-  if(e.type==='peer-unavailable')notice('לא נמצא חדר פתוח. בדקו את קוד המורה.');
-  else notice('לא ניתן להתחבר. נסו שוב או בדקו רשת.');
-  studentJoinForm(code);
- });
-}
-function lostConnection(){
- if(role==='student'){
-  role='lost';app.innerHTML=`<section class="card mobile-card big-wait"><div class="bubble">📴</div><h2>החיבור למורה נותק</h2><p class="muted">ודאו שהמורה השאיר את מסך החדר פתוח ונסו להיכנס שוב.</p><button class="btn primary" id="retry">חיבור מחדש</button></section>`;
-  document.getElementById('retry').onclick=()=>{studentJoinForm(roomCode);joinStudent(roomCode)};
- }
-}
-function studentReceive(message){
- if(!message||typeof message!=='object')return;
- if(message.type==='state'){
-  const newRound=message.round;
-  if(newRound!==lastRound){mySelected=[];studentVote=null;lastRound=newRound}
-  stage={caseIndex:message.caseIndex,phase:message.phase,round:newRound};
-  studentVote=Array.isArray(message.yourVote)?message.yourVote:null;
-  mySelected=studentVote?[...studentVote]:[];
-  role='student';renderStudent();
- }else if(message.type==='saved'){
-  if(message.round!==stage.round)return;
-  studentVote=[...message.values];mySelected=[...studentVote];renderStudent();notice('התשובה נקלטה על מסך המורה');
- }
-}
-function sendVote(values){
- if(!connection?.open){notice('אין כרגע חיבור למורה');return}
- connection.send({type:'vote',round:stage.round,values});
+function startStudent(value){
+ if(!/^\d{6}$/.test(value)){toast('הקוד חייב להכיל שש ספרות');return}
+ cleanup();role='join';room=value;myId=sessionStorage.getItem('technoda-med-v3-id')||uuid();sessionStorage.setItem('technoda-med-v3-id',myId);
+ app.innerHTML=`<section class="card mobile-card big-wait"><div class="loading-circle"></div><h2>מחפשים את חדר ${safe(value)}...</h2><p id="waitmsg" class="muted">מתחברים לשירות ההצבעה ובודקים שמסך המורה פעיל.</p><button id="tryAgain" class="btn tiny ghost">חזרה והקלדת קוד</button></section>`;
+ document.getElementById('tryAgain').onclick=()=>joinForm(room);
+ let joined=false;
+ es=listen(async m=>{
+  if(m.type!=='state'||typeof m.session!=='string'||milliseconds()-m.t>60000)return;
+  if(!joined){
+   session=m.session;joined=true;joinVerified=true;
+   try{await send({type:'hello',session,id:myId})}catch(e){joined=false;joinVerified=false;const el=document.getElementById('waitmsg');if(el)el.textContent='החדר אותר, אבל לא ניתן לשלוח אליו תשובות. בדקו את האינטרנט ונסו שוב.';return}
+  }
+  if(m.session!==session)return;
+  const nr=`${m.caseIndex}:${m.phase}`;
+  if(nr!==myStage){myStage=nr;myVote=[];mySent=null;}
+  if(!Number.isInteger(m.caseIndex)||m.caseIndex<0||m.caseIndex>=CASES.length||!Object.values(MODE).includes(m.phase))return;
+  stage={caseIndex:m.caseIndex,phase:m.phase};role='student';renderStudent();
+ },()=>{const e=document.getElementById('waitmsg');if(e)e.textContent='מחפשים הודעה ממסך המורה. יש להשאיר את המסך פתוח.'},()=>{
+  const e=document.getElementById('waitmsg');if(e)e.textContent='אין חיבור לשירות ההצבעה. נסו לעבור מרשת Wi-Fi לגלישה סלולרית.';
+ },'65s');
+ // Students should not be told "room not found" if the connection has not been confirmed yet.
+ setTimeout(()=>{if(role==='join'&&!joined){const e=document.getElementById('waitmsg');if(e)e.innerHTML='עדיין לא התקבלה הודעה מהמורה. בדקו שהמורה נמצא ב<strong>גרסה 3.0</strong>, שהחיווי שלו <strong>ירוק</strong> ושהקוד זהה.'}},12000);
 }
 function renderStudent(){
- document.body.classList.remove('teacher-screen');
- const c=activeCase();
- if(stage.phase===MODE.VIDEO){
-  app.innerHTML=`<section class="card mobile-card big-wait"><span class="pill">📱 מחוברים לחדר ${roomCode}</span><div class="bubble">🎬</div><h2>הביטו במסך המורה</h2><p class="muted">כעת מציגים את הסרטון של ${safe(c.name)}. הקשיבו לפרטי המקרה. השאלה תופיע כאן מיד כשהמורה יבחר בה.</p><div class="saved">✓ אתם מחוברים</div></section>`;return;
- }
- const q=questionFor(),metrics=stage.phase===MODE.METRICS;
- app.innerHTML=`<section class="card mobile-card">
-  <div class="topline"><span class="pill">📱 מחוברים · חדר ${roomCode}</span><span class="micro">${safe(c.subtitle)} · ${safe(c.name)}</span></div>
-  <div class="label">${metrics?'בחירת מדדים':'שאלת אנמנזה'}</div><h2 style="margin:9px 0 12px">${safe(q.title)}</h2>
-  <div class="instruction">${metrics?'בחרו עד שני מדדים. אפשר לשנות את הבחירה לפני השליחה.':'לחצו על האפשרות שאתם מעדיפים לשאול קודם. אפשר לשנות את התשובה.'}</div>
-  <div id="studentOptions">${q.options.map((opt,i)=>`<button class="phone-option ${mySelected.includes(i)?'selected':''}" data-option="${i}"><span class="circle">${mySelected.includes(i)?'✓':letters[i]}</span><span>${safe(opt)}</span></button>`).join('')}</div>
-  <div id="submissionArea">${metrics?`<button id="submitMetrics" class="btn primary block large" ${mySelected.length!==2?'disabled':''}>${studentVote?'עדכון הבחירה':'שליחת שני המדדים'}</button>`:studentVote?'<div class="saved">✓ התשובה נקלטה. אפשר לבחור שוב כדי לשנות אותה.</div>':'<div class="micro muted">בחירה באפשרות תשלח את התשובה מיד.</div>'}</div>
- </section>`;
- document.querySelectorAll('[data-option]').forEach(b=>b.onclick=()=>{
-  const i=Number(b.dataset.option);
-  if(!metrics){mySelected=[i];sendVote([i]);renderStudent();return}
-  if(mySelected.includes(i))mySelected=mySelected.filter(x=>x!==i);
-  else if(mySelected.length<2)mySelected.push(i);else{notice('אפשר לבחור שני מדדים בלבד');return}
-  renderStudent();
+ document.body.classList.remove('teacher-screen');const c=currentCase(),isVideo=stage.phase===MODE.VIDEO;
+ if(isVideo){app.innerHTML=`<section class="card mobile-card big-wait"><span class="pill">🟢 מחוברים · חדר ${room}</span><div class="bubble">🎬</div><h2>צפו בסרטון על מסך המורה</h2><p class="muted">${safe(c.name)} מציג/ה את המקרה. השאלה תופיע כאן כשמסך המורה יעבור לשלב הבא.</p></section>`;return}
+ const q=curQuestion(),two=stage.phase===MODE.METRICS;
+ app.innerHTML=`<section class="card mobile-card"><span class="pill">🟢 מחוברים · חדר ${room}</span>
+ <h2>${safe(q.title)}</h2><div class="instruction">${two?'בחרו שני מדדים ולאחר מכן לחצו ״שליחה״':'בחרו שאלה אחת. הבחירה נשלחת בלחיצה.'}</div>
+ <div id="options">${q.options.map((opt,i)=>`<button class="phone-option ${myVote.includes(i)?'selected':''}" data-option="${i}"><span class="circle">${myVote.includes(i)?'✓':choiceLetters[i]}</span><span>${safe(opt)}</span></button>`).join('')}</div>
+ ${two?`<button class="btn primary block large" id="submit" ${myVote.length!==2?'disabled':''}>שליחת שני המדדים</button>`:'<p class="micro muted">אפשר לשנות את הבחירה.</p>'}
+ <div class="saved" id="result" ${mySent?'':'hidden'}>✓ הבחירה נשלחה ונקלטת במסך המורה.</div></section>`;
+ document.querySelectorAll('[data-option]').forEach(btn=>btn.onclick=()=>{
+  const i=Number(btn.dataset.option);
+  if(!two){myVote=[i];mySent=null;renderStudent();submitVote();return}
+  if(myVote.includes(i))myVote=myVote.filter(x=>x!==i);
+  else if(myVote.length<2)myVote.push(i);else{toast('אפשר לבחור שני מדדים בלבד');return}
+  mySent=null;renderStudent();
  });
- const sendBtn=document.getElementById('submitMetrics');if(sendBtn)sendBtn.onclick=()=>{if(mySelected.length===2)sendVote([...mySelected])};
+ const sendBtn=document.getElementById('submit');if(sendBtn)sendBtn.onclick=submitVote;
 }
-window.addEventListener('beforeunload',()=>{try{peer?.destroy()}catch(e){}});
-window.addEventListener('load',()=>{
- const query=new URLSearchParams(location.search);
- const join=query.get('room');
- if(query.get('teacher')==='1')createTeacher();
- else if(join&&/^\d{6}$/.test(join))studentJoinForm(join);else hero();
-});
-</script>
-</body>
-</html>
+async function submitVote(){
+ if(!joinVerified||!session){toast('אין חיבור לחדר המורה');return}
+ const expected=stage.phase===MODE.METRICS?2:1;
+ if(myVote.length!==expected)return;
+ const round=currentRound();
+ try{await send({type:'vote',session,id:myId,round,values:[...myVote]});mySent=[...myVote];if(role==='student'&&currentRound()===round){const e=document.getElementById('result');if(e)e.hidden=false;toast('✓ התשובה נשלחה')}}
+ catch(e){toast('שליחת התשובה נכשלה. נסו שוב או בדקו את האינטרנט.')}
+}
+window.addEventListener('beforeunload',()=>{try{es?.close()}catch(e){}});
+window.addEventListener('load',()=>{const params=new URLSearchParams(location.search);if(params.get('teacher')==='1')startTeacher();else if(/^\d{6}$/.test(params.get('room')||''))startStudent(params.get('room'));else hero()});
+</script></body></html>
